@@ -9,6 +9,7 @@ Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.0');
 
   api.use('jagi:astronomy');
+  api.use('underscore');
 
   // Module.
   api.addFiles('lib/module/global.js', ['client', 'server']);
