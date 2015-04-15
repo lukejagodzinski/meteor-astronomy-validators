@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.0');
 
-  api.use('jagi:astronomy');
+  api.use('jagi:astronomy@0.2.0');
   api.use('underscore');
 
   // Module.
