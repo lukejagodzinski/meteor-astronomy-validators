@@ -4,6 +4,7 @@
 - [About](#about)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Errors](#errors)
 - [Validators](#validators)
   - [and](#and)
   - [or](#or)
@@ -86,6 +87,42 @@ Post.schema.addValidators((function(v) {
     email: v.isEmail()
   };
 }(Astro.Validators)));
+```
+
+To validate object against defined validation rules, we have to call the `validate` function on given object. It returns `true` if object passed all validation rules and `false` otherwise.
+
+```js
+var post = new Post();
+if (post.validate()) {
+  post.save();
+}
+```
+
+We can get an error message for a field using the `getError` function which is a reactive data source.
+
+```js
+var post = new Post();
+if (post.validate()) {
+  post.save();
+} else {
+  alert(post.getError('title')); // Get error message (if present) for `title` field.
+}
+```
+
+Of course, you won't be getting error messages in that way for most of the time. Instead it's better to use a template's helper function that can be used next to the form field related with the given object's field.
+
+```hbs
+{{#with post}}
+<input type="text" name="title" />
+<div class="error">{{validationError "title"}}</div>
+{{/with}}
+```
+
+The `validationError` helper has two required arguments: `object` and `field`. You don't have to pass the `object` argument, if helper is called in the context of a Meteor Astronomy object. You don't have also to name the first argument. Like in the example above instead of writing `field="title"`, we just wrote `"title"`. We can do so, because the first unnamed argument is treated as a `field` argument. Of course, we can name all the arguments.
+
+```hbs
+<input type="text" name="title" />
+<div class="error">{{validationError field="title" object=post}}</div>
 ```
 
 ## Validators
