@@ -4,7 +4,10 @@
 - [About](#about)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Errors](#errors)
+  - [Adding validators](#adding-validators)
+  - [Validation](#validation)
+  - [Getting errors](#getting-errors)
+  - [Displaying errors](#displaying-errors)
 - [Validators](#validators)
   - [and](#and)
   - [or](#or)
@@ -40,6 +43,8 @@ $ meteor add jagi:astronomy-validators
 ```
 
 ## Usage
+
+### Adding validators
 
 Let's see how to add validators to our model.
 
@@ -89,6 +94,8 @@ Post.schema.addValidators((function(v) {
 }(Astro.Validators)));
 ```
 
+### Validation
+
 To validate object against defined validation rules, we have to call the `validate` function on given object. It returns `true` if object passed all validation rules and `false` otherwise.
 
 ```js
@@ -98,7 +105,9 @@ if (post.validate()) {
 }
 ```
 
-We can get an error message for a field using the `getError` function which is a reactive data source.
+### Getting errors
+
+At the root of validation system is the possiblity of getting error message for fields that didn't pass validation. We can get an error message for a particular field using the `getError` function which is a reactive data source.
 
 ```js
 var post = new Post();
@@ -109,20 +118,39 @@ if (post.validate()) {
 }
 ```
 
-Of course, you won't be getting error messages in that way for most of the time. Instead it's better to use a template's helper function that can be used next to the form field related with the given object's field.
+Another very important thing is possibility to check whether there are any errors, not only for particular field. The `hasError` method is also a reactive data source.
+
+```js
+var post = new Post();
+post.validate();
+if (post.hasError()) {
+  alert(post.getError('title')); // Get error message (if present) for `title` field.
+}
+```
+
+### Displaying errors
+
+Of course, you are not going to get error messages by hand for most of the time. Instead it's better to use a template's helper function that can be used next to the form field related with the given object's field.
 
 ```hbs
 {{#with post}}
 <input type="text" name="title" />
-<div class="error">{{validationError "title"}}</div>
+<div class="error">{{getError "title"}}</div>
 {{/with}}
 ```
 
-The `validationError` helper has two required arguments: `object` and `field`. You don't have to pass the `object` argument, if helper is called in the context of a Meteor Astronomy object. You don't have also to name the first argument. Like in the example above instead of writing `field="title"`, we just wrote `"title"`. We can do so, because the first unnamed argument is treated as a `field` argument. Of course, we can name all the arguments.
+The `getError` helper has two required arguments: `object` and `field`. You don't have to pass the `object` argument, if helper is called in the context of a Meteor Astronomy object. You don't have also to name the first argument. Like in the example above instead of writing `field="title"`, we just wrote `"title"`. We can do so, because the first unnamed argument is treated as a `field` argument. Of course, we can name all the arguments.
 
 ```hbs
 <input type="text" name="title" />
-<div class="error">{{validationError field="title" object=post}}</div>
+<div class="error">{{getError field="title" object=post}}</div>
+```
+
+Sometimes we display `div` element with error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. We can use in this case the `hasError` method that is a reactive data source.
+
+```hbs
+<input type="text" name="title" />
+{{#if post.hasError}}<div class="error">{{getError field="title" object=post}}</div>{{/if}}
 ```
 
 ## Validators
