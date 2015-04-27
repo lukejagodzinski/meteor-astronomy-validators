@@ -11,6 +11,7 @@ Package.onUse(function(api) {
   api.use('jagi:astronomy@0.2.0');
   api.use('underscore');
   api.use('reactive-dict');
+  api.use('reactive-var');
   api.use('ui');
 
   // Module.
