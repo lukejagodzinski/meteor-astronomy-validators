@@ -50,13 +50,12 @@ $ meteor add jagi:astronomy-validators
 Let's see how to add validators to our model.
 
 ```js
-Post = Astronomy.Class({
+Post = Astro.Class({
   name: 'Post',
   collection: Posts,
-  transform: true,
   fields: ['title'],
   validators: {
-    title: Astro.Validators.minLength(5, 'At least 5 character!')
+    title: Validators.minLength(5, 'At least 5 character!')
   }
 });
 ```
@@ -68,19 +67,19 @@ The validation function takes two arguments, both are optional. The first one is
 We also have several ways of adding validators to already defined schema.
 
 ```js
-Post.schema.addValidator('email', Astro.Validators.isEmail());
+Post.schema.addValidator('email', Validators.isEmail());
 
 Post.schema.addValidators({
-  title: Astro.Validators.isString(),
-  email: Astro.Validators.isEmail()
+  title: Validators.isString(),
+  email: Validators.isEmail()
 });
 ```
 
-Sometimes writing such long names of validators may be frustrating. To avoid that we suggest creating local alias for the `Astronomy.Validators` namespace.
+Sometimes writing such long names of validators may be frustrating. To avoid that we suggest creating shorter alias for the `Validators` variable.
 
 ```js
 // Local (in given file) alias.
-var v = Astro.Validators;
+var v = Validators;
 Post.schema.addValidators({
   title: v.isString(),
   email: v.isEmail()
@@ -92,7 +91,7 @@ Post.schema.addValidators((function(v) {
     title: v.isString(),
     email: v.isEmail()
   };
-}(Astro.Validators)));
+}(Validators)));
 ```
 
 ### Validation
@@ -129,6 +128,86 @@ if (post.hasError()) {
 }
 ```
 
+### Creating error message
+
+In case of a validation error, we have to generate an error message. The error message generation consists of few steps which we will discuss in the moment. We can leave this process to the validator. However if we want something more than a standard error message, then we should consider hooking into the process.
+
+The validation error can be generated in the one of three steps.
+
+- Custom validation error message/function passed as a second argument of the validator
+- The `validationerror` event triggered on the object
+- Default validator's error message
+- Standard validation error message
+
+We can hook into two first steps.
+
+The first one you already got familiar with. Take an example.
+
+```js
+Post = Astro.Class({
+  name: 'Post',
+  collection: Posts,
+  fields: ['title'],
+  validators: {
+    title: Validators.minLength(5, 'Custom error message')
+  }
+});
+```
+
+The second one is more flexible...
+
+```js
+Post = Astro.Class({
+  name: 'Post',
+  collection: Posts,
+  fields: ['title'],
+  validators: {
+    title: Validators.minLength(5)
+  },
+  events: {
+    validationerror: function(e) {
+      var messages = {
+        title: 'Not correct title!'
+      };
+
+      return messages[e.data.field];
+    }
+  }
+});
+```
+
+... or something like...
+
+```js
+Post = Astro.Class({
+  name: 'Post',
+  collection: Posts,
+  fields: ['title'],
+  validators: {
+    title: Validators.minLength(5)
+  },
+  events: {
+    validationerror: function(e) {
+      var messages = {
+        minLength: 'Too short!'
+      };
+
+      return messages[e.data.validator.name];
+    }
+  }
+});
+```
+
+As you can see we can compose an error message based on many rules that are passed to the event. The event object contains `data` attribute which stores few valuable attributes:
+
+- `data.field` - name of the field
+- `data.value` - value of the field
+- `data.validator` - the whole validator object that generates error
+- `data.validator.name` - the name of the validator
+- `data.options` - options passed to the validation in the class schema definition
+
+Thanks to that flexibility, we can create error messages that fits our needs. We can for instance internationalize error messages or create some dictionary of error messages - there are no limitations.
+
 ### Displaying errors
 
 Of course, you are not going to get error messages by hand for most of the time. Instead it's better to use a template's helper function that can be used next to the form field related with the given object's field.
@@ -163,9 +242,9 @@ Sometimes we display `div` element with error message that has some styling and 
 The `and` validator takes array of validation functions as a parameter. All validators in the array have to pass validation. It will be probably the most used validator, because almost always you will need more than one rule per field.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.and([
-  Astro.Validators.isString(),
-  Astro.Validators.minLength(5)
+Post.schema.addValidator('title', Validators.and([
+  Validators.isString(),
+  Validators.minLength(5)
 ]));
 ```
 
@@ -176,9 +255,9 @@ Post.schema.addValidator('title', Astro.Validators.and([
 The `or` validator is similar to `and` with one difference that only one validator from the list has to pass validation test. In the example below the `title` field's value has to be at least 5 characters long or has to be equal `test`.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.or([
-  Astro.Validators.minLength(5),
-  Astro.Validators.equal('test')
+Post.schema.addValidator('title', Validators.or([
+  Validators.minLength(5),
+  Validators.equal('test')
 ]));
 ```
 
@@ -189,7 +268,7 @@ Post.schema.addValidator('title', Astro.Validators.or([
 The `isString` validator doesn't take any options as the first argument and it's function is to check whether the field's value is a string. In the example below, we used `str` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.str());
+Post.schema.addValidator('title', Validators.str());
 ```
 
 ### isNumber
@@ -199,7 +278,7 @@ Post.schema.addValidator('title', Astro.Validators.str());
 The `isNumber` validator doesn't take any options as the first argument and it's function is to check whether the field's value is a number. In the example below, we used `num` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('commentsCount', Astro.Validators.num());
+Post.schema.addValidator('commentsCount', Validators.num());
 ```
 
 ### isDate
@@ -209,7 +288,7 @@ Post.schema.addValidator('commentsCount', Astro.Validators.num());
 The `isDate` validator doesn't take any options as the first argument and it's function is to check whether the field's value is a date. In the example below, we used `date` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('createdAt', Astro.Validators.date());
+Post.schema.addValidator('createdAt', Validators.date());
 ```
 
 ### isNull
@@ -219,7 +298,7 @@ Post.schema.addValidator('createdAt', Astro.Validators.date());
 The `isNull` validator doesn't take any options as the first argument and it's function is to check whether the field's value is null. In the example below, we used `null` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.null());
+Post.schema.addValidator('title', Validators.null());
 ```
 
 ### isNotNull
@@ -229,7 +308,7 @@ Post.schema.addValidator('title', Astro.Validators.null());
 The `isNotNull` validator doesn't take any options as the first argument and it's function is to check whether the field's value is not null. In the example below, we used `notnull` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.notnull());
+Post.schema.addValidator('title', Validators.notnull());
 ```
 
 ### isEmail
@@ -239,7 +318,7 @@ Post.schema.addValidator('title', Astro.Validators.notnull());
 The `isEmail` validator doesn't take any options as the first argument and it's function is to check whether the field's value is a valid e-mail address. In the example below, we used `email` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('createdAt', Astro.Validators.email());
+Post.schema.addValidator('createdAt', Validators.email());
 ```
 
 ### minLength
@@ -249,7 +328,7 @@ Post.schema.addValidator('createdAt', Astro.Validators.email());
 The `minLength` validator takes a number as the first argument and it's function is to check whether the field's value is at least X characters long. Where X is the first argument of the validator. It can also work on fields of `Array` type, then it checks number of elements in the array. In the example below, we used `minlen` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.minlen(5));
+Post.schema.addValidator('title', Validators.minlen(5));
 ```
 
 ### maxLength
@@ -259,7 +338,7 @@ Post.schema.addValidator('title', Astro.Validators.minlen(5));
 The `maxLength` validator takes a number as the first argument and it's function is to check whether the field's value is at most X characters long. Where X is the first argument of the validator. It can also work on fields of `Array` type, then it checks number of elements in the array. In the example below, we used `maxlen` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.maxlen(10));
+Post.schema.addValidator('title', Validators.maxlen(10));
 ```
 
 ### greaterThan
@@ -269,11 +348,11 @@ Post.schema.addValidator('title', Astro.Validators.maxlen(10));
 The `greaterThan` validator takes as the first argument a number, a date or any other value that can be compared. Its function is to check whether the field's value is greater than one provided as the argument. It can also take a function as the argument, then it will be executed first and returned value will be used in the comparison. In the example below, we used `gt` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('commentsCount', Astro.Validators.gt(10));
+Post.schema.addValidator('commentsCount', Validators.gt(10));
 // In this example we are checking whether end date is greater than beginning
 // date that is stored in the same object. As you can see, `this` points to the
 // object on which validation takes place.
-Post.schema.addValidator('endDate', Astro.Validators.gt(function() {
+Post.schema.addValidator('endDate', Validators.gt(function() {
   return this.begDate;
 });
 ```
@@ -285,11 +364,11 @@ Post.schema.addValidator('endDate', Astro.Validators.gt(function() {
 The `greaterThanEqual` validator takes as the first argument a number, a date or any other value that can be compared. Its function is to check whether the field's value is greater or equal to the one provided as the argument. It can also take a function as the argument, then it will be executed first and returned value will be used in the comparison. In the example below, we used `gte` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('commentsCount', Astro.Validators.gte(10));
+Post.schema.addValidator('commentsCount', Validators.gte(10));
 // In this example we are checking whether end date is greater than on equal to
 // beginning date that is stored in the same object. As you can see, `this`
 // points to the object on which validation takes place.
-Post.schema.addValidator('endDate', Astro.Validators.gte(function() {
+Post.schema.addValidator('endDate', Validators.gte(function() {
   return this.begDate;
 });
 ```
@@ -301,11 +380,11 @@ Post.schema.addValidator('endDate', Astro.Validators.gte(function() {
 The `lessThan` validator takes as the first argument a number, a date or any other value that can be compared. Its function is to check whether the field's value is less than one provided as the argument. It can also take a function as the argument, then it will be executed first and returned value will be used in the comparison. In the example below, we used `lt` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('commentsCount', Astro.Validators.lt(10));
+Post.schema.addValidator('commentsCount', Validators.lt(10));
 // In this example we are checking whether end date is less than beginning
 // date that is stored in the same object. As you can see, `this` points to the
 // object on which validation takes place.
-Post.schema.addValidator('endDate', Astro.Validators.lt(function() {
+Post.schema.addValidator('endDate', Validators.lt(function() {
   return this.begDate;
 });
 ```
@@ -317,11 +396,11 @@ Post.schema.addValidator('endDate', Astro.Validators.lt(function() {
 The `lessThanOrEqual` validator takes as the first argument a number, a date or any other value that can be compared. Its function is to check whether the field's value is less or equal to the one provided as the argument. It can also take a function as the argument, then it will be executed first and returned value will be used in the comparison. In the example below, we used `lte` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('commentsCount', Astro.Validators.lte(10));
+Post.schema.addValidator('commentsCount', Validators.lte(10));
 // In this example we are checking whether end date is less than on equal to
 // beginning date that is stored in the same object. As you can see, `this`
 // points to the object on which validation takes place.
-Post.schema.addValidator('endDate', Astro.Validators.lte(function() {
+Post.schema.addValidator('endDate', Validators.lte(function() {
   return this.begDate;
 });
 ```
@@ -333,7 +412,7 @@ Post.schema.addValidator('endDate', Astro.Validators.lte(function() {
 The `hasProperty` validator takes as the first argument a property name. Its function is to check whether the field's value, which should be an object, has given property. In the example below, we used `has` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('object', Astro.Validators.has('propertyName'));
+Post.schema.addValidator('object', Validators.has('propertyName'));
 ```
 
 ### equal
@@ -343,7 +422,7 @@ Post.schema.addValidator('object', Astro.Validators.has('propertyName'));
 The `equal` validator checks whether the field's value is equal to the value of the first argument passed to the validator. It can also take a function as the argument, then it will be executed first and returned value will be used in the comparison. In the example below, we used `eq` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.eq('test'));
+Post.schema.addValidator('title', Validators.eq('test'));
 ```
 
 ### equalTo
@@ -353,7 +432,7 @@ Post.schema.addValidator('title', Astro.Validators.eq('test'));
 The `equalTo` validator checks whether the field's value is equal to value of the field which name was passed to the validator as the first argument. In the example below, we used `eqt` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('pass1', Astro.Validators.eqt('pass2'));
+Post.schema.addValidator('pass1', Validators.eqt('pass2'));
 ```
 
 ### regExp
@@ -363,7 +442,7 @@ Post.schema.addValidator('pass1', Astro.Validators.eqt('pass2'));
 The `regExp` validator checks whether the field's value matches the regular expression pattern that was passed to the validator as the first argument. In the example below, we used `re` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('title', Astro.Validators.re(/^[a-zA-Z0-9]+$/));
+Post.schema.addValidator('title', Validators.re(/^[a-zA-Z0-9]+$/));
 ```
 
 ### choice
@@ -373,7 +452,7 @@ Post.schema.addValidator('title', Astro.Validators.re(/^[a-zA-Z0-9]+$/));
 The `choice` validator checks whether the field's value is equal to one of the values provided as the first argument of the validator. In the example below, we used `oneof` alias to make it shorter.
 
 ```js
-Post.schema.addValidator('sex', Astro.Validators.oneof(['male', 'female']));
+Post.schema.addValidator('sex', Validators.oneof(['male', 'female']));
 ```
 
 ## Writing validators
@@ -381,7 +460,7 @@ Post.schema.addValidator('sex', Astro.Validators.oneof(['male', 'female']));
 We will describe process of creating validator on the example of the `isString` validator. There is a whole code of this validator in the listing below.
 
 ```js
-Astronomy.Validator({
+Astro.Validator({
   name: 'maxLength',
   aliases: ['maxLen', 'maxlen'],
   validate: function(fieldName, value, maxLength /* option(s) */) {
@@ -404,7 +483,7 @@ Astronomy.Validator({
 We have two mandatory attributes. The first one is the `name` attribute which will be used to add a validator to the global `Validators` object under that name. We can also assign a returned value from the `Validator` function to our custom variable and use it as an alias.
 
 ```js
-isStr = Astronomy.Validator({
+isStr = Astro.Validator({
   name: 'isString',
   validate: function() {
     /* ... */

@@ -18,10 +18,12 @@ Package.onUse(function(api) {
 
   // Module.
   api.addFiles('lib/module/global.js', ['client', 'server']);
-  api.addFiles('lib/module/methods.js', ['client', 'server']);
-  api.addFiles('lib/module/schema.js', ['client', 'server']);
   api.addFiles('lib/module/error.js', ['client', 'server']);
   api.addFiles('lib/module/validator.js', ['client', 'server']);
+  api.addFiles('lib/module/init.js', ['client', 'server']);
+  api.addFiles('lib/module/init_schema.js', ['client', 'server']);
+  api.addFiles('lib/module/init_class.js', ['client', 'server']);
+  api.addFiles('lib/module/init_instance.js', ['client', 'server']);
   api.addFiles('lib/module/module.js', ['client', 'server']);
   api.addFiles('lib/module/helpers.js', ['client', 'server']);
 
