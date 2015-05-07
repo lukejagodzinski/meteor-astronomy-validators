@@ -7,6 +7,7 @@
   - [Adding validators](#adding-validators)
   - [Validation](#validation)
   - [Getting errors](#getting-errors)
+  - [Creating error message](#creating-error-message)
   - [Displaying errors](#displaying-errors)
 - [Validators](#validators)
   - [and](#and)
@@ -62,7 +63,7 @@ Post = Astronomy.Class({
 
 As you can see, we've added `minLength` validator to the `title` field. We just pass an object of key - value pairs, where key is the field name and value is validation function. The `minLength` is one of many predefined validation functions. You can also create your own functions. In the next section of this document you will find list of all validators.
 
-The validation function takes two arguments, both are optional. The first one is the option(s) that given validator may need to work. It can be array, string, number, boolean or any object. It depends on validator type. The second argument is custom error message. You can skip that one if you want to display default message.
+The validation function takes two arguments, both are optional. The first one is the option(s) that given validator may need to work. It can be array, string, number, boolean or any object. It depends on the validator's type. The second argument is a custom error message. You can skip that one if you want to display default message.
 
 We also have several ways of adding validators to already defined schema.
 
@@ -381,31 +382,43 @@ We will describe process of creating validator on the example of the `isString` 
 
 ```js
 Astronomy.Validator({
-  name: 'isString',
-  aliases: ['isStr', 'string', 'str'],
-  validate: function(value, undefined, fieldName) {
-    return _.isString(value);
+  name: 'maxLength',
+  aliases: ['maxLen', 'maxlen'],
+  validate: function(fieldName, value, maxLength /* option(s) */) {
+    if (!value) {
+      return false;
+    }
+
+    return value.length <= maxLength;
   },
-  message: function(value, undefined, fieldName) {
-    return 'The "' + fieldName + '" has to be a string';
+  onvalidationerror: function(e) {
+    var fieldName = e.data.field;
+    var maxLength = e.data.options;
+
+    return 'The "' + fieldName + '" length has to be at most ' + maxLength;
   }
 });
+
 ```
 
-We have two mandatory attributes. The first one is `name` attribute which will be used to add validator to `Astronomy.Validators` object under that name. We can also assign value returned from `Astronomy.Validator` function to our custom variable and use it as an alias.
+We have two mandatory attributes. The first one is the `name` attribute which will be used to add a validator to the global `Validators` object under that name. We can also assign a returned value from the `Validator` function to our custom variable and use it as an alias.
 
 ```js
 isStr = Astronomy.Validator({
   name: 'isString',
-  validate: _.isString
+  validate: function() {
+    /* ... */
+  }
 });
 ```
 
-The second mandatory attribute is `validate` function. It should return boolean value indicating if given field passed validation. The `validate` function receives three arguments: value, option(s) and field name. The options (second) argument can be for instance the number with which we are comparing current field's value.
+The second mandatory attribute is the `validate` function. It should return a boolean value indicating if given field passed validation. The `validate` function receives three arguments: field name, value and option(s). The options argument can be for instance the number with which we are comparing current field's value. In the example of the `maxLength` validator, the options argument is `maxLength` of the string.
 
-There are also two optional attributes. First one is the `message` function that receives the same arguments as the `validate` function. It has to return error message in case of not passing validation test. It will be a default validation error message that can be overwritten by a developer using the validator.
+There are also two optional attributes.
 
-There is also one more attribute that needs attention. It's `aliases` array. Given validator will be added to the `Astronomy.Validators` object under names defined in the `aliases` array.
+The first one is the `onvalidationerror` function which is an event triggered when an error occured during the validation process. It has to return an error message. It will be a default validation error message that can be overwritten by a developer using validator's custom message or the `onvalidationerror` event defined on the level of class schema definition.
+
+There is also one more attribute that needs attention. It's the `aliases` array. Given validator will be also added to the global `Validators` object under the names defined in the `aliases` array.
 
 ## Contribution
 
