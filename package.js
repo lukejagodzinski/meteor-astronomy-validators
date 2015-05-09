@@ -33,6 +33,8 @@ Package.onUse(function(api) {
 
   api.addFiles('lib/validators/is_string.js', ['client', 'server']);
   api.addFiles('lib/validators/is_number.js', ['client', 'server']);
+  api.addFiles('lib/validators/is_array.js', ['client', 'server']);
+  api.addFiles('lib/validators/is_object.js', ['client', 'server']);
   api.addFiles('lib/validators/is_date.js', ['client', 'server']);
   api.addFiles('lib/validators/is_null.js', ['client', 'server']);
   api.addFiles('lib/validators/is_not_null.js', ['client', 'server']);

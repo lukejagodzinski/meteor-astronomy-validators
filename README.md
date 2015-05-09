@@ -14,6 +14,8 @@
   - [or](#or)
   - [isString](#isstring)
   - [isNumber](#isnumber)
+  - [isArray](#isarray)
+  - [isObject](#isobject)
   - [isDate](#isdate)
   - [isNull](#isnull)
   - [isNotNull](#isnotnull)
@@ -279,6 +281,26 @@ The `isNumber` validator doesn't take any options as the first argument and it's
 
 ```js
 Post.schema.addValidator('commentsCount', Validators.num());
+```
+
+### isArray
+
+*Aliases: `isarray`, `array`*
+
+The `isArray` validator doesn't take any options as the first argument and it's function is to check whether the field's value is an array. In the example below, we used `array` alias to make it shorter.
+
+```js
+Post.schema.addValidator('commentsCount', Validators.array());
+```
+
+### isObject
+
+*Aliases: `isObj`, `isobj`, `obj`, `object`*
+
+The `isObject` validator doesn't take any options as the first argument and it's function is to check whether the field's value is an object. In the example below, we used `obj` alias to make it shorter.
+
+```js
+Post.schema.addValidator('commentsCount', Validators.obj());
 ```
 
 ### isDate
