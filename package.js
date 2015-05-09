@@ -1,6 +1,6 @@
 Package.describe({
   name: 'jagi:astronomy-validators',
-  version: '0.5.0',
+  version: '0.6.0',
   summary: 'Validators for Meteor Astronomy',
   git: 'https://github.com/jagi/meteor-astronomy-validators.git'
 });
@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
 
-  api.use('jagi:astronomy@0.5.0');
+  api.use('jagi:astronomy@0.6.0');
   api.use('underscore');
   api.use('reactive-dict');
   api.use('reactive-var');
@@ -20,7 +20,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/module/global.js', ['client', 'server']);
   api.addFiles('lib/module/error.js', ['client', 'server']);
   api.addFiles('lib/module/validator.js', ['client', 'server']);
-  api.addFiles('lib/module/init.js', ['client', 'server']);
+  api.addFiles('lib/module/init_module.js', ['client', 'server']);
   api.addFiles('lib/module/init_schema.js', ['client', 'server']);
   api.addFiles('lib/module/init_class.js', ['client', 'server']);
   api.addFiles('lib/module/init_instance.js', ['client', 'server']);
