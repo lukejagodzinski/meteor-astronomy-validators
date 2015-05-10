@@ -109,24 +109,24 @@ if (post.validate()) {
 
 ### Getting errors
 
-At the root of validation system is the possiblity of getting error message for fields that didn't pass validation. We can get an error message for a particular field using the `getError` function which is a reactive data source.
+At the root of validation system is the possiblity of getting error message for fields that didn't pass validation. We can get an error message for a particular field using the `getValidationError` function which is a reactive data source.
 
 ```js
 var post = new Post();
 if (post.validate()) {
   post.save();
 } else {
-  alert(post.getError('title')); // Get error message (if present) for `title` field.
+  alert(post.getValidationError('title')); // Get error message (if present) for `title` field.
 }
 ```
 
-Another very important thing is possibility to check whether there are any errors, not only for particular field. The `hasError` method is also a reactive data source.
+Another very important thing is possibility to check whether there are any errors, not only for particular field. The `hasValidationError` method is also a reactive data source.
 
 ```js
 var post = new Post();
 post.validate();
-if (post.hasError()) {
-  alert(post.getError('title')); // Get error message (if present) for `title` field.
+if (post.hasValidationError()) {
+  alert(post.getValidationError('title')); // Get error message (if present) for `title` field.
 }
 ```
 
@@ -134,10 +134,11 @@ if (post.hasError()) {
 
 In case of a validation error, we have to generate an error message. The error message generation consists of few steps which we will discuss in the moment. We can leave this process to the validator. However if we want something more than a standard error message, then we should consider hooking into the process.
 
-The validation error can be generated in the one of three steps.
+The validation error can be generated in the one of few steps.
 
 - Custom validation error message/function passed as a second argument of the validator
 - The `validationerror` event triggered on the object
+- The global `validationerror` event
 - Default validator's error message
 - Standard validation error message
 
@@ -200,6 +201,18 @@ Post = Astro.Class({
 });
 ```
 
+The third step is the global `validationerror` event which can override the process of an error message generation.
+
+```js
+Astro.on('validationerror', function(e) {
+  var messages = {
+    minLength: 'Too short!'
+  };
+
+  return messages[e.data.validator.name];
+});
+```
+
 As you can see we can compose an error message based on many rules that are passed to the event. The event object contains `data` attribute which stores few valuable attributes:
 
 - `data.field` - name of the field
@@ -217,22 +230,22 @@ Of course, you are not going to get error messages by hand for most of the time.
 ```hbs
 {{#with post}}
 <input type="text" name="title" />
-<div class="error">{{getError "title"}}</div>
+<div class="error">{{getValidationError "title"}}</div>
 {{/with}}
 ```
 
-The `getError` helper has two required arguments: `object` and `field`. You don't have to pass the `object` argument, if helper is called in the context of a Meteor Astronomy object. You don't have also to name the first argument. Like in the example above instead of writing `field="title"`, we just wrote `"title"`. We can do so, because the first unnamed argument is treated as a `field` argument. Of course, we can name all the arguments.
+The `getValidationError` helper has two required arguments: `object` and `field`. You don't have to pass the `object` argument, if helper is called in the context of a Meteor Astronomy object. You don't have also to name the first argument. Like in the example above instead of writing `field="title"`, we just wrote `"title"`. We can do so, because the first unnamed argument is treated as a `field` argument. Of course, we can name all the arguments.
 
 ```hbs
 <input type="text" name="title" />
-<div class="error">{{getError field="title" object=post}}</div>
+<div class="error">{{getValidationError field="title" object=post}}</div>
 ```
 
-Sometimes we display `div` element with error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. We can use in this case the `hasError` method that is a reactive data source.
+Sometimes we display `div` element with error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. We can use in this case the `hasValidationError` method that is a reactive data source.
 
 ```hbs
 <input type="text" name="title" />
-{{#if post.hasError}}<div class="error">{{getError field="title" object=post}}</div>{{/if}}
+{{#if post.hasValidationError}}<div class="error">{{getValidationError field="title" object=post}}</div>{{/if}}
 ```
 
 ## Validators
