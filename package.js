@@ -1,6 +1,6 @@
 Package.describe({
   name: 'jagi:astronomy-validators',
-  version: '0.6.1',
+  version: '0.6.2',
   summary: 'Validators for Meteor Astronomy',
   git: 'https://github.com/jagi/meteor-astronomy-validators.git'
 });
