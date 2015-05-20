@@ -120,13 +120,18 @@ if (post.validate()) {
 }
 ```
 
-Another very important thing is possibility to check whether there are any errors, not only for particular field. The `hasValidationError` method is also a reactive data source.
+Another very important thing is possibility to check whether there are any errors. We can check if there are any errors or if the given field has a validation error. For that purpose we have two function `hasValidationErrors` and `hasValidationError`. Both methods are the reactive data sources.
 
 ```js
 var post = new Post();
 post.validate();
-if (post.hasValidationError()) {
-  alert(post.getValidationError('title')); // Get error message (if present) for `title` field.
+
+if (post.hasValidationErrors()) {
+  alert(post.getValidationError('title')); // Get error message for `title` field.
+}
+
+if (post.hasValidationError('title')) {
+  alert(post.getValidationError('title')); // Get error message for `title` field.
 }
 ```
 
@@ -225,7 +230,7 @@ Thanks to that flexibility, we can create error messages that fits our needs. We
 
 ### Displaying errors
 
-Of course, you are not going to get error messages by hand for most of the time. Instead it's better to use a template's helper function that can be used next to the form field related with the given object's field.
+For displaying errors in templates you can use all three mentioned above methods: `getValidationError`, `hasValidationsErrors` and `hasValidationError`. You use them as normal methods in the templates.
 
 ```hbs
 {{#with post}}
@@ -234,18 +239,18 @@ Of course, you are not going to get error messages by hand for most of the time.
 {{/with}}
 ```
 
-The `getValidationError` helper has two required arguments: `object` and `field`. You don't have to pass the `object` argument, if helper is called in the context of a Meteor Astronomy object. You don't have also to name the first argument. Like in the example above instead of writing `field="title"`, we just wrote `"title"`. We can do so, because the first unnamed argument is treated as a `field` argument. Of course, we can name all the arguments.
+Sometimes we display a `div` element with an error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. In this case, we can use the `hasValidationErrors` method that is a reactive data source.
 
 ```hbs
 <input type="text" name="title" />
-<div class="error">{{getValidationError field="title" object=post}}</div>
+{{#if post.hasValidationErrors}}<div class="error">{{post.getValidationError "title"}}</div>{{/if}}
 ```
 
-Sometimes we display `div` element with error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. We can use in this case the `hasValidationError` method that is a reactive data source.
+Or when we want to check presence of the validation error only for the particular field.
 
 ```hbs
 <input type="text" name="title" />
-{{#if post.hasValidationError}}<div class="error">{{getValidationError field="title" object=post}}</div>{{/if}}
+{{#if post.hasValidationError "title"}}<div class="error">{{post.getValidationError "title"}}</div>{{/if}}
 ```
 
 ## Validators
