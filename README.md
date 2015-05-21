@@ -500,7 +500,7 @@ Post.schema.addValidator('sex', Validators.oneof(['male', 'female']));
 We will describe process of creating validator on the example of the `isString` validator. There is a whole code of this validator in the listing below.
 
 ```js
-Astro.Validator({
+Astro.createValidator({
   name: 'maxLength',
   aliases: ['maxLen', 'maxlen'],
   validate: function(fieldName, value, maxLength /* option(s) */) {
@@ -523,7 +523,7 @@ Astro.Validator({
 We have two mandatory attributes. The first one is the `name` attribute which will be used to add a validator to the global `Validators` object under that name. We can also assign a returned value from the `Validator` function to our custom variable and use it as an alias.
 
 ```js
-isStr = Astro.Validator({
+isStr = Astro.createValidator({
   name: 'isString',
   validate: function() {
     /* ... */
