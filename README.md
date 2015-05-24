@@ -6,6 +6,7 @@
 - [Usage](#usage)
   - [Adding validators](#adding-validators)
   - [Validation](#validation)
+  - [Server validation](#server-validation)
   - [Getting errors](#getting-errors)
   - [Creating error message](#creating-error-message)
   - [Displaying errors](#displaying-errors)
@@ -31,6 +32,7 @@
   - [equalTo](#equalto)
   - [regExp](#regexp)
   - [choice](#choice)
+  - [unique](#unique)
 - [Writing validators](#writing-validators)
 - [Contribution](#contribution)
 - [License](#license)
@@ -105,6 +107,60 @@ var post = new Post();
 if (post.validate()) {
   post.save();
 }
+```
+
+### Server validation
+
+Let's say we want to perform some validation on the server to be sure that data is not corrupt. The example of such validation may be uniqueness of the email address in the collection of users.
+
+Here is the class definition:
+
+```js
+User = Astro.Class({
+  name: 'User',
+  collection: Users,
+  fields: {
+    email: 'string'
+  },
+  validators: {
+    email: Validators.and([
+      Validators.unique(),
+      Validators.required(),
+      Validators.email()
+    ])
+  }
+});
+```
+
+In the `Form` template's event handler for the save button, we call `/user/save` method and pass the `user` object. In the callback function as the first argument we get an error object that we can use to populate our user object with errors using the `catchValidationException` function.
+
+```js
+Template.Form.events({
+  'click [name=save]': function(e, tmpl) {
+    var user = this;
+
+    Meteor.call('/user/save', user, function(err) {
+      if (err) {
+        user.catchValidationException(err);
+      }
+    });
+  }
+});
+```
+
+The `/user/save` method looks like in the listing below. When there are any validation errors we have to throw them using the `throwValidationException` function.
+
+```js
+Meteor.methods({
+  '/user/save': function(user) {
+    if (user.validate()) {
+      user.save();
+      return user;
+    }
+
+    user.throwValidationException();
+  }
+});
 ```
 
 ### Getting errors
@@ -497,6 +553,17 @@ The `choice` validator checks whether the field's value is equal to one of the v
 
 ```js
 Post.addValidator('sex', Validators.oneof(['male', 'female']));
+```
+
+### unique
+
+*Aliases: `isUnique`*
+
+The `unique` validator checks whether the field's value is unique.
+
+```js
+// Each email address has to be unique.
+Post.addValidator('email', Validators.unique());
 ```
 
 ## Writing validators
