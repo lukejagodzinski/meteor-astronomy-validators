@@ -109,29 +109,33 @@ if (post.validate()) {
 
 ### Getting errors
 
-At the root of validation system is the possiblity of getting error message for fields that didn't pass validation. We can get an error message for a particular field using the `getValidationError` function which is a reactive data source.
+At the root of validation system is the possiblity of getting error message for fields that didn't pass validation. We can get an error message for a particular field using the `getError` function or we can just take all validation errors using `getErrors` method. Both methods returns a reactive data.
 
 ```js
 var post = new Post();
 if (post.validate()) {
   post.save();
 } else {
-  alert(post.getValidationError('title')); // Get error message (if present) for `title` field.
+  console.log(post.getError('title')); // Get error message (if present) for `title` field.
+
+  // Or.
+
+  console.log(post.getErrors()); // Get all erro messages.
 }
 ```
 
-Another very important thing is possibility to check whether there are any errors. We can check if there are any errors or if the given field has a validation error. For that purpose we have two function `hasValidationErrors` and `hasValidationError`. Both methods are the reactive data sources.
+Another very important thing is possibility to check whether there are any errors. We can check if there are any errors or if the given field has a validation error. For that purpose we have two function `hasErrors` and `hasError`. Both methods are the reactive data sources.
 
 ```js
 var post = new Post();
 post.validate();
 
-if (post.hasValidationErrors()) {
-  alert(post.getValidationError('title')); // Get error message for `title` field.
+if (post.hasErrors()) {
+  alert(post.getError('title')); // Get error message for `title` field.
 }
 
-if (post.hasValidationError('title')) {
-  alert(post.getValidationError('title')); // Get error message for `title` field.
+if (post.hasError('title')) {
+  alert(post.getError('title')); // Get error message for `title` field.
 }
 ```
 
@@ -230,27 +234,27 @@ Thanks to that flexibility, we can create error messages that fits our needs. We
 
 ### Displaying errors
 
-For displaying errors in templates you can use all three mentioned above methods: `getValidationError`, `hasValidationsErrors` and `hasValidationError`. You use them as normal methods in the templates.
+For displaying errors in templates you can use all three mentioned above methods: `getError`, `hasErrors` and `hasError`. You use them as normal methods in the templates.
 
 ```hbs
 {{#with post}}
 <input type="text" name="title" />
-<div class="error">{{getValidationError "title"}}</div>
+<div class="error">{{getError "title"}}</div>
 {{/with}}
 ```
 
-Sometimes we display a `div` element with an error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. In this case, we can use the `hasValidationErrors` method that is a reactive data source.
+Sometimes we display a `div` element with an error message that has some styling and we wouldn't want this element to be visible until validation happens and there are any errors. In this case, we can use the `hasErrors` method that is a reactive data source.
 
 ```hbs
 <input type="text" name="title" />
-{{#if post.hasValidationErrors}}<div class="error">{{post.getValidationError "title"}}</div>{{/if}}
+{{#if post.hasErrors}}<div class="error">{{post.getError "title"}}</div>{{/if}}
 ```
 
 Or when we want to check presence of the validation error only for the particular field.
 
 ```hbs
 <input type="text" name="title" />
-{{#if post.hasValidationError "title"}}<div class="error">{{post.getValidationError "title"}}</div>{{/if}}
+{{#if post.hasError "title"}}<div class="error">{{post.getError "title"}}</div>{{/if}}
 ```
 
 ## Validators
