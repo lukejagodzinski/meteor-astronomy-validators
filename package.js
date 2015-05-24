@@ -9,9 +9,8 @@ Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
 
   api.use('jagi:astronomy@0.9.0');
+  api.use('jagi:reactive-map');
   api.use('underscore');
-  api.use('reactive-dict');
-  api.use('reactive-var');
   api.use('ui');
 
   api.imply('jagi:astronomy');
