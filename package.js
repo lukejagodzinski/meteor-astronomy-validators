@@ -50,6 +50,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/validators/equal_to.js', ['client', 'server']);
   api.addFiles('lib/validators/regexp.js', ['client', 'server']);
   api.addFiles('lib/validators/choice.js', ['client', 'server']);
+  api.addFiles('lib/validators/unique.js', ['client', 'server']);
 
   api.export(['Validators'], ['client', 'server']);
 });
