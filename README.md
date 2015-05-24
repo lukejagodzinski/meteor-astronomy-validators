@@ -120,7 +120,7 @@ if (post.validate()) {
 
   // Or.
 
-  console.log(post.getErrors()); // Get all erro messages.
+  console.log(post.getErrors()); // Get all error messages.
 }
 ```
 
