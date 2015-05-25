@@ -574,18 +574,22 @@ We will describe process of creating validator on the example of the `isString` 
 Astro.createValidator({
   name: 'maxLength',
   aliases: ['maxLen', 'maxlen'],
-  validate: function(fieldName, value, maxLength /* option(s) */) {
+  validate: function(fieldName, value, maxLength) {
     if (!value) {
       return false;
     }
 
     return value.length <= maxLength;
   },
-  onvalidationerror: function(e) {
-    var fieldName = e.data.field;
-    var maxLength = e.data.options;
+  events: {
+    validationerror: function(e) {
+      var fieldName = e.data.field;
+      var maxLength = e.data.options;
 
-    return 'The "' + fieldName + '" length has to be at most ' + maxLength;
+      // Set error message for validator.
+      e.data.message = 'The "' + fieldName +
+        '" length has to be at most ' + maxLength;
+    }
   }
 });
 
@@ -596,8 +600,16 @@ We have two mandatory attributes. The first one is the `name` attribute which wi
 ```js
 isStr = Astro.createValidator({
   name: 'isString',
+  aliases: [/* aliases */],
   validate: function() {
     /* ... */
+  },
+  events: {
+    validationerror: function(e) {
+      // Set error message for validator.
+      e.data.message = 'Error message';
+      /* ... */
+    }
   }
 });
 ```
@@ -606,9 +618,9 @@ The second mandatory attribute is the `validate` function. It should return a bo
 
 There are also two optional attributes.
 
-The first one is the `onvalidationerror` function which is an event triggered when an error occured during the validation process. It has to return an error message. It will be a default validation error message that can be overwritten by a developer using validator's custom message or the `onvalidationerror` event defined on the level of class schema definition.
+The first attribute is the events object with the definition of the `validationerror` event. The `validationerror` event receives event object as the first argument. We can set the `e.data.message` attribute's value to set an error message for validator. The error message can be overridden by other `validationerror` events defined on the level of class or in the global scope.
 
-There is also one more attribute that needs attention. It's the `aliases` array. Given validator will be also added to the global `Validators` object under the names defined in the `aliases` array.
+There is also one more attribute that needs attention. It's the `aliases` array. The given validator will be also added to the global `Validators` object under the names defined in the `aliases` array.
 
 ## Contribution
 
