@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
 
-  api.use('jagi:astronomy@0.9.0');
+  api.use('jagi:astronomy@0.9.1');
   api.use('jagi:reactive-map@0.1.0');
   api.use('underscore');
   api.use('ui');
