@@ -269,7 +269,7 @@ Post = Astro.Class({
 The third step is the global `validationerror` event which can override the process of an error message generation.
 
 ```js
-Astro.on('validationerror', function(e) {
+Astro.eventManager.on('validationerror', function(e) {
   var messages = {
     minLength: 'Too short!'
   };
