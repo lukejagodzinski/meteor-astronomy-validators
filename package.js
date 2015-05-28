@@ -18,7 +18,6 @@ Package.onUse(function(api) {
   // Module.
   api.addFiles('lib/module/global.js', ['client', 'server']);
   api.addFiles('lib/module/utils.js', ['client', 'server']);
-  api.addFiles('lib/module/error.js', ['client', 'server']);
   api.addFiles('lib/module/validator_definition.js', ['client', 'server']);
   api.addFiles('lib/module/validator.js', ['client', 'server']);
   api.addFiles('lib/module/init_module.js', ['client', 'server']);
