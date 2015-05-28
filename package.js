@@ -19,6 +19,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/module/global.js', ['client', 'server']);
   api.addFiles('lib/module/utils.js', ['client', 'server']);
   api.addFiles('lib/module/error.js', ['client', 'server']);
+  api.addFiles('lib/module/validator_definition.js', ['client', 'server']);
   api.addFiles('lib/module/validator.js', ['client', 'server']);
   api.addFiles('lib/module/init_module.js', ['client', 'server']);
   api.addFiles('lib/module/init_class.js', ['client', 'server']);
@@ -26,9 +27,6 @@ Package.onUse(function(api) {
   api.addFiles('lib/module/module.js', ['client', 'server']);
 
   // Validators.
-  api.addFiles('lib/validators/and.js', ['client', 'server']);
-  api.addFiles('lib/validators/or.js', ['client', 'server']);
-
   api.addFiles('lib/validators/is_string.js', ['client', 'server']);
   api.addFiles('lib/validators/is_number.js', ['client', 'server']);
   api.addFiles('lib/validators/is_array.js', ['client', 'server']);
@@ -38,6 +36,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/validators/is_not_null.js', ['client', 'server']);
   api.addFiles('lib/validators/is_email.js', ['client', 'server']);
 
+  api.addFiles('lib/validators/required.js', ['client', 'server']);
   api.addFiles('lib/validators/min_length.js', ['client', 'server']);
   api.addFiles('lib/validators/max_length.js', ['client', 'server']);
   api.addFiles('lib/validators/greater_than.js', ['client', 'server']);
