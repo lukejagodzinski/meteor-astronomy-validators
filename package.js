@@ -38,6 +38,7 @@ Package.onUse(function(api) {
   api.addFiles('lib/validators/required.js', ['client', 'server']);
   api.addFiles('lib/validators/min_length.js', ['client', 'server']);
   api.addFiles('lib/validators/max_length.js', ['client', 'server']);
+  api.addFiles('lib/validators/length.js', ['client', 'server']);
   api.addFiles('lib/validators/greater_than.js', ['client', 'server']);
   api.addFiles('lib/validators/greater_than_or_equal.js', ['client', 'server']);
   api.addFiles('lib/validators/less_than.js', ['client', 'server']);
