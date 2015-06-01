@@ -62,3 +62,11 @@ Package.onUse(function(api) {
 
   api.export(['Validators'], ['client', 'server']);
 });
+
+Package.onTest(function(api) {
+  api.use('tinytest');
+  api.use('insecure');
+  api.use('jagi:astronomy-validators@0.10.2');
+
+  api.addFiles('test/validators.js', ['client', 'server']);
+});
