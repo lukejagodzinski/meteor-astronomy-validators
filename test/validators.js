@@ -1,4 +1,6 @@
 Tinytest.add('Validators module - Validators', function(test) {
+  Astro.classes = [];
+
   var Items = new Mongo.Collection('items');
 
   var Item = Astro.Class({
@@ -196,7 +198,7 @@ Tinytest.add('Validators module - Validators', function(test) {
     'Should not pass "or" validation'
   );
 
-  ///////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////////////
 
   // Type.
   itemB.set('string', 'abc');
@@ -313,4 +315,92 @@ Tinytest.add('Validators module - Validators', function(test) {
   test.isTrue(itemB.validate('or'),
     'Should pass "or" validation'
   );
+});
+
+Tinytest.add('Validators module - Nested fields', function(test) {
+  Astro.classes = [];
+
+  var Item = Astro.Class({
+    name: 'Item',
+    fields: {
+      object: 'object',
+      array: 'array'
+    },
+    validators: {
+      'object.property': Validators.string(),
+      'array.0': Validators.object(),
+      'array.$': Validators.object(),
+      'array.$.property': Validators.string(),
+    }
+  });
+
+  var item = new Item();
+
+  test.isFalse(item.validate('object.property'),
+    'Should not pass "object.property" validation'
+  );
+  test.isFalse(item.validate('array.0'),
+    'Should not pass "array.0" validation'
+  );
+  item.array = [
+    'abc'
+  ];
+  test.isFalse(item.validate('array.$'),
+    'Should not pass "array.$" validation'
+  );
+  item.array = [{
+    property: 123
+  }];
+  test.isFalse(item.validate('array.$.property'),
+    'Should not pass "array.$.property" validation'
+  );
+
+  //////////////////////////////////////////////////////////////////////////////
+
+  item.object = {
+    property: 'abc'
+  };
+  item.array = [{
+    property: 'abc'
+  }, {
+    property: 'def'
+  }];
+  test.isTrue(item.validate('object.property'),
+    'Should pass "object.property" validation'
+  );
+  test.isTrue(item.validate('array.0'),
+    'Should pass "array.0" validation'
+  );
+  test.isTrue(item.validate('array.$'),
+    'Should pass "array.$" validation'
+  );
+  test.isTrue(item.validate('array.$.property'),
+    'Should pass "array.$.property" validation'
+  );
+});
+
+Tinytest.add('Validators module - Validation order', function(test) {
+  Astro.classes = [];
+
+  var Item = Astro.Class({
+    name: 'Item',
+    fields: [
+      'first',
+      'second'
+    ],
+    validators: {
+      'first': Validators.string(),
+      'second': Validators.string()
+    },
+    validationOrder: [
+      'second',
+      'first'
+    ]
+  });
+
+  var item = new Item();
+  item.validate();
+  var errors = item.getValidationErrors();
+  test.isTrue(_.has(errors, 'second'),
+    'The "second" validator should be run as a first');
 });
