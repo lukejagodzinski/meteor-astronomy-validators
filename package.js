@@ -1,6 +1,6 @@
 Package.describe({
   name: 'jagi:astronomy-validators',
-  version: '0.10.1',
+  version: '0.10.2',
   summary: 'Validators for Meteor Astronomy',
   git: 'https://github.com/jagi/meteor-astronomy-validators.git'
 });
@@ -26,35 +26,39 @@ Package.onUse(function(api) {
   api.addFiles('lib/module/module.js', ['client', 'server']);
 
   // Type validators.
-  api.addFiles('lib/validators/string.js', ['client', 'server']);
-  api.addFiles('lib/validators/number.js', ['client', 'server']);
-  api.addFiles('lib/validators/boolean.js', ['client', 'server']);
-  api.addFiles('lib/validators/array.js', ['client', 'server']);
-  api.addFiles('lib/validators/object.js', ['client', 'server']);
-  api.addFiles('lib/validators/date.js', ['client', 'server']);
-  api.addFiles('lib/validators/email.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/string.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/number.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/boolean.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/array.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/object.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/date.js', ['client', 'server']);
+  api.addFiles('lib/validators/type/email.js', ['client', 'server']);
 
   // Existence validators.
-  api.addFiles('lib/validators/required.js', ['client', 'server']);
-  api.addFiles('lib/validators/null.js', ['client', 'server']);
-  api.addFiles('lib/validators/not_null.js', ['client', 'server']);
-  api.addFiles('lib/validators/has.js', ['client', 'server']);
+  api.addFiles('lib/validators/existence/required.js', ['client', 'server']);
+  api.addFiles('lib/validators/existence/null.js', ['client', 'server']);
+  api.addFiles('lib/validators/existence/not_null.js', ['client', 'server']);
+  api.addFiles('lib/validators/existence/has.js', ['client', 'server']);
 
   // Size validators.
-  api.addFiles('lib/validators/length.js', ['client', 'server']);
-  api.addFiles('lib/validators/min_length.js', ['client', 'server']);
-  api.addFiles('lib/validators/max_length.js', ['client', 'server']);
-  api.addFiles('lib/validators/gt.js', ['client', 'server']);
-  api.addFiles('lib/validators/gte.js', ['client', 'server']);
-  api.addFiles('lib/validators/lt.js', ['client', 'server']);
-  api.addFiles('lib/validators/lte.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/length.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/min_length.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/max_length.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/gt.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/gte.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/lt.js', ['client', 'server']);
+  api.addFiles('lib/validators/size/lte.js', ['client', 'server']);
 
   // Comparison validators.
-  api.addFiles('lib/validators/choice.js', ['client', 'server']);
-  api.addFiles('lib/validators/unique.js', ['client', 'server']);
-  api.addFiles('lib/validators/equal.js', ['client', 'server']);
-  api.addFiles('lib/validators/equal_to.js', ['client', 'server']);
-  api.addFiles('lib/validators/regexp.js', ['client', 'server']);
+  api.addFiles('lib/validators/comparison/choice.js', ['client', 'server']);
+  api.addFiles('lib/validators/comparison/unique.js', ['client', 'server']);
+  api.addFiles('lib/validators/comparison/equal.js', ['client', 'server']);
+  api.addFiles('lib/validators/comparison/equal_to.js', ['client', 'server']);
+  api.addFiles('lib/validators/comparison/regexp.js', ['client', 'server']);
+
+  // Logical operators.
+  api.addFiles('lib/validators/logical/and.js', ['client', 'server']);
+  api.addFiles('lib/validators/logical/or.js', ['client', 'server']);
 
   api.export(['Validators'], ['client', 'server']);
 });
