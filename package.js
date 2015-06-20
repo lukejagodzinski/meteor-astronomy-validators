@@ -12,6 +12,7 @@ Package.onUse(function(api) {
   api.use('jagi:reactive-map@0.2.1');
   api.use('underscore');
   api.use('ui');
+  api.use('check');
 
   api.imply('jagi:astronomy');
 
