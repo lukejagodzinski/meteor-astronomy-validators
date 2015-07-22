@@ -25,7 +25,6 @@ Package.onUse(function(api) {
   api.addFiles('lib/module/init_module.js', ['client', 'server']);
   api.addFiles('lib/module/init_class.js', ['client', 'server']);
   api.addFiles('lib/module/init_instance.js', ['client', 'server']);
-  api.addFiles('lib/module/module.js', ['client', 'server']);
 
   // Type validators.
   api.addFiles('lib/validators/type/string.js', ['client', 'server']);
