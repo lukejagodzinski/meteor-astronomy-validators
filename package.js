@@ -23,7 +23,7 @@ Package.onUse(function(api) {
     'lib/module/error.js',
     'lib/module/utils.js',
     'lib/module/validator_definition.js',
-    'lib/module/validator.js',
+    'lib/module/create_validator.js',
     'lib/module/init_module.js',
     'lib/module/init_class.js'
   ], ['client', 'server']);
