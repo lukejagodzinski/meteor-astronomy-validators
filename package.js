@@ -45,7 +45,6 @@ Package.onUse(function(api) {
     'lib/validators/existence/required.js',
     'lib/validators/existence/null.js',
     'lib/validators/existence/not_null.js',
-    'lib/validators/existence/has.js'
   ], ['client', 'server']);
 
   // Size validators.
@@ -76,7 +75,9 @@ Package.onUse(function(api) {
 
   // Embeded validators.
   api.addFiles([
-    'lib/validators/embeded/every.js'
+    'lib/validators/embedded/every.js',
+    'lib/validators/embedded/has.js',
+    'lib/validators/embedded/contains.js'
   ], ['client', 'server']);
 
   api.export(['Validators'], ['client', 'server']);
