@@ -20,9 +20,10 @@ Package.onUse(function(api) {
   api.addFiles([
     'lib/module/global.js',
     'lib/module/errors.js',
-    'lib/module/error.js',
-    'lib/module/utils.js',
+    'lib/module/validation_error.js',
     'lib/module/validator_definition.js',
+    'lib/module/validator.js',
+    'lib/module/field_validator.js',
     'lib/module/create_validator.js',
     'lib/module/init_module.js',
     'lib/module/init_class.js'
@@ -67,10 +68,15 @@ Package.onUse(function(api) {
     'lib/validators/comparison/regexp.js'
   ], ['client', 'server']);
 
-  // Logical operators.
+  // Logical validators.
   api.addFiles([
     'lib/validators/logical/and.js',
     'lib/validators/logical/or.js'
+  ], ['client', 'server']);
+
+  // Embeded validators.
+  api.addFiles([
+    'lib/validators/embeded/every.js'
   ], ['client', 'server']);
 
   api.export(['Validators'], ['client', 'server']);
