@@ -21,11 +21,12 @@ Package.onUse(function(api) {
     'lib/module/global.js',
     'lib/module/errors.js',
     'lib/module/validation_error.js',
-    'lib/module/validator_definition.js',
     'lib/module/validator.js',
     'lib/module/field_validator.js',
     'lib/module/create_validator.js',
-    'lib/module/init_module.js',
+    'lib/module/validate.js',
+    'lib/module/get_error.js',
+    'lib/module/ejson.js',
     'lib/module/init_class.js'
   ], ['client', 'server']);
 
