@@ -76,9 +76,9 @@ Package.onUse(function(api) {
 
   // Embeded validators.
   api.addFiles([
-    'lib/validators/embedded/every.js',
-    'lib/validators/embedded/has.js',
-    'lib/validators/embedded/contains.js'
+    'lib/validators/nested/every.js',
+    'lib/validators/nested/has.js',
+    'lib/validators/nested/contains.js'
   ], ['client', 'server']);
 
   api.export(['Validators'], ['client', 'server']);
