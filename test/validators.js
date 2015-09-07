@@ -103,6 +103,12 @@ Tinytest.add('Validators module - Validators', function(test) {
   test.isFalse(itemB.validate('number'),
     'Should not pass "number" validation'
   );
+  // NaN case
+  itemB.set('number', NaN);
+  test.isFalse(itemB.validate('number'),
+    'Should not pass "number" validation when NaN'
+  );
+
   test.isFalse(itemB.validate('boolean'),
     'Should not pass "boolean" validation'
   );
@@ -166,6 +172,7 @@ Tinytest.add('Validators module - Validators', function(test) {
   test.isFalse(itemB.validate('lte'),
     'Should not pass "lte" validation'
   );
+
   // Comparison.
   itemB.set('choice', 'abc');
   itemB.set('unique', 'abc');
