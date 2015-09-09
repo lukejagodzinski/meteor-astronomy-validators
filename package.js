@@ -19,7 +19,6 @@ Package.onUse(function(api) {
   // Module.
   api.addFiles([
     'lib/module/global.js',
-    'lib/module/errors.js',
     'lib/module/validation_error.js',
     'lib/module/validator.js',
     'lib/module/field_validator.js',
