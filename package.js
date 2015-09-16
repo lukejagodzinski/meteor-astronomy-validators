@@ -72,7 +72,9 @@ Package.onUse(function(api) {
   // Logical validators.
   api.addFiles([
     'lib/validators/logical/and.js',
-    'lib/validators/logical/or.js'
+    'lib/validators/logical/or.js',
+    'lib/validators/logical/if.js',
+    'lib/validators/logical/switch.js'
   ], ['client', 'server']);
 
   // Embeded validators.
