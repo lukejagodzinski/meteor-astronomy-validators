@@ -13,6 +13,7 @@ Package.onUse(function(api) {
   api.use('underscore');
   api.use('ui');
   api.use('check');
+  api.use('tracker');
 
   api.imply('jagi:astronomy');
 
