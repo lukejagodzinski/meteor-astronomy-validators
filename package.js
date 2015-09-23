@@ -14,6 +14,7 @@ Package.onUse(function(api) {
   api.use('ui');
   api.use('check');
   api.use('tracker');
+  api.use('ejson');
 
   api.imply('jagi:astronomy');
 
