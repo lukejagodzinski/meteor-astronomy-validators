@@ -1,6 +1,6 @@
 Package.describe({
   name: 'jagi:astronomy-validators',
-  version: '1.0.0-rc.4',
+  version: '1.0.0',
   summary: 'Validators for Meteor Astronomy',
   git: 'https://github.com/jagi/meteor-astronomy-validators.git'
 });
@@ -8,8 +8,8 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
 
-  api.use('jagi:astronomy@1.0.0-rc.4');
-  api.use('jagi:reactive-map@0.2.2');
+  api.use('jagi:astronomy@1.0.0');
+  api.use('jagi:reactive-map@1.0.0');
   api.use('underscore');
   api.use('ui');
   api.use('check');
