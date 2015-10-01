@@ -8,7 +8,7 @@ Package.describe({
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
 
-  api.use('jagi:astronomy@1.0.0');
+  api.use('jagi:astronomy@1.0.1');
   api.use('jagi:reactive-map@1.0.0');
   api.use('underscore');
   api.use('ui');
@@ -29,9 +29,8 @@ Package.onUse(function(api) {
     'lib/module/validate.js',
     'lib/module/get_error.js',
     'lib/module/ejson.js',
-    'lib/module/init_definition.js',
-    'lib/module/init_schema.js',
-    'lib/module/init_class.js'
+    'lib/module/init_class.js',
+    'lib/module/init_definition.js'
   ], ['client', 'server']);
 
   // Type validators.
