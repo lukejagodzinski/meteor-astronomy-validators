@@ -1,3 +1,15 @@
+# 1.1.0 (2015-10-28)
+
+- Ability to validate nested fields from the top level document.
+  - Now you can do `doc.validate('field.nestedField')`
+  - Now you can do `doc.getValidationError('field.nestedField')`
+  - Now you can do `doc.hasValidationError('field.nestedField')`
+  - All the following methods also work with the nested fields: `doc.getValidationErrors()`, `doc.hasValidationErrors()`, `doc.clearValidationErrors()`, `doc.throwValidationException()`, `doc.catchValidationException()`
+
+# 1.0.4 (2015-10-11)
+
+- Use ReactiveMap 2.0
+
 # 1.0.3 (2015-10-08)
 
 - Fixed wrong property name in the `afterSet` event
