@@ -1,3 +1,7 @@
+# 1.1.1 (2015-10-31)
+
+- Removed the `ui` package to not load `blaze` and `jquery` packages unnecessary
+
 # 1.1.0 (2015-10-28)
 
 - Ability to validate nested fields from the top level document.
