@@ -1,3 +1,7 @@
+# 1.1.2 (2015-11-25)
+
+- Removes all existing errors for a field on validation, if it's optional and now changed to null
+
 # 1.1.1 (2015-10-31)
 
 - Removed the `ui` package to not load `blaze` and `jquery` packages unnecessary
