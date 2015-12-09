@@ -40,7 +40,8 @@ Package.onUse(function(api) {
     'lib/validators/type/array.js',
     'lib/validators/type/object.js',
     'lib/validators/type/date.js',
-    'lib/validators/type/email.js'
+    'lib/validators/type/email.js',
+    'lib/validators/type/url.js'
   ], ['client', 'server']);
 
   // Existence validators.
